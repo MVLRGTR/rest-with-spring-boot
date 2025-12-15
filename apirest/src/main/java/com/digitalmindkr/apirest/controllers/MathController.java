@@ -11,16 +11,30 @@ public class MathController {
 	// http://localhost:8080/math/sum/3/5
 	@RequestMapping("/sum/{numberOne}/{numberTwo}")
 	public Double sum(@PathVariable("numberOne") String numberOne ,@PathVariable("numberTwo") String numberTwo) throws Exception {
-		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) throw new IllegalArgumentException();
+		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) throw new UnsupportedOperationException("Please set a numeric value correct !!!");
 		return convertToDouble(numberOne) + convertToDouble(numberTwo);
 	}
-
-	private Double convertToDouble(String numberString) {
-		return 1D;
+	
+	@RequestMapping("/sub/{numberOne}/{numberTwo}")
+	public Double sub(@PathVariable("numberOne") String numberOne ,@PathVariable("numberTwo") String numberTwo) throws Exception{
+		if(!isNumeric(numberOne) || !isNumeric(numberTwo)) throw new UnsupportedOperationException("Please set a numeric value correct !!!");
+		return convertToDouble(numberOne) - convertToDouble(numberTwo);
 	}
 
-	private boolean isNumeric(String numberOne) {
-		return true;
+	private Double convertToDouble(String strNumber) throws IllegalArgumentException {
+		if(strNumber == null || strNumber.isEmpty()) {
+			throw new UnsupportedOperationException("Please set a numeric value correct !");
+		}
+		String number = strNumber.replace(",", ".");
+		return Double.parseDouble(number);
+	}
+
+	private boolean isNumeric(String strNumber) {
+		if(strNumber == null || strNumber.isEmpty()) {
+			return false;
+		}
+		String number = strNumber.replace(",", "."); // R$ 5,00 USD 5.00
+		return number.matches("[-+]?[0-9]*\\.?[0-9]+");
 	}
 	
 	// http://localhost:8080/math/subtraction/3/5
