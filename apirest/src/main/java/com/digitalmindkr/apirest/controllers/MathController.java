@@ -61,8 +61,7 @@ public class MathController {
 		return number.matches("[-+]?[0-9]*\\.?[0-9]+");
 	}
 	
-	// http://localhost:8080/math/subtraction/3/5
-	// http://localhost:8080/math/division/3/5
+
 	
 	
 	
