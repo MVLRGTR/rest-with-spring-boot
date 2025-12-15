@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.digitalmindkr.apirest.exception.ExceptionResponse;
+import com.digitalmindkr.apirest.exception.UnsupportedMathOperationException;
 
 @RestControllerAdvice     //Caso alguma classe não forneça tratamento adequado para o erro ele irá cair no tratamento global
 @RestController           //Aqui nos temos o handler que irá fazer o direcionamento dos erros para o tratamento correto
@@ -23,7 +24,7 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ExceptionHandler(UnsupportedOperationException.class) // aqui fazemos o tratamento de parametros não suportados 
+	@ExceptionHandler(UnsupportedMathOperationException.class) // aqui fazemos o tratamento de parametros não suportados 
 	public final ResponseEntity<ExceptionResponse> handleBadRequest(Exception ex , WebRequest request){
 		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
 		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
