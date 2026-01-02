@@ -5,59 +5,53 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 import com.digitalmindkr.apirest.model.Person;
+import com.digitalmindkr.apirest.repository.PersonRepository;
 
 @Service
 public class PersonService {
 
-	private final AtomicLong counter = new AtomicLong();
+	//private final AtomicLong counter = new AtomicLong();
+	
+	@Autowired
+	PersonRepository repository;
+	
 	private Logger logger = Logger.getLogger(PersonService.class.getName()); //faço a adição de um logger para a classe
 	
 	public Person create(Person person) {
 		logger.info("Creating one person");
-		return person;
+		return repository.save(person);
 	}
 	
 	public Person update(Person person) {
 		logger.info("Updating one person");
-		return person;
+		Person entity = repository.findById(person.getId()).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
+		entity.setFirstName(person.getFirstName());
+		entity.setLastName(person.getLastName());
+		entity.setAddress(person.getAddress());
+		entity.setGender(person.getGender());
+		return repository.save(entity);
 	}
 	
-	public void delete(String id) {
+	public void delete(Long id) {
 		logger.info("Deleting one person");
+		repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
+		repository.deleteById(id);
 	}
 	
-	public Person findById(String id) {
+	public Person findById(Long id) {
 		logger.info("Finding one person");
-		Person p = new Person();
-		p.setId(counter.incrementAndGet());
-		p.setFirstName("Marcos");
-		p.setLastName("Vincius");
-		p.setAddress("Mont serrat");
-		p.setGender("Male");
-		
-		return p;
+		return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
 	}
 	
 	public List<Person> findAll(){
 		logger.info("Finding all peoples");
-		List<Person> persons = new ArrayList<Person>();
-		for(int i = 0 ; i < 8 ; i++) {
-			Person person = mockPerson(i);
-			persons.add(person);
-		}
-		return persons;
+		return repository.findAll();
 	}
 
-	private Person mockPerson(int i) {
-		Person p = new Person();
-		p.setId(counter.incrementAndGet());
-		p.setFirstName("First name :" + i);
-		p.setLastName("Last name : "+ i);
-		p.setAddress("Mont serrat");
-		p.setGender("Male");
-		return p;
-	}
+	
 }
