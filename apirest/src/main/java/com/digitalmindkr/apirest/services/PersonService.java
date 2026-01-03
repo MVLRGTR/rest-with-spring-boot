@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 import com.digitalmindkr.apirest.model.Person;
+import com.digitalmindkr.apirest.data.dto.PersonDTO;
 import com.digitalmindkr.apirest.repository.PersonRepository;
+
+import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseListObjects;
+import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseObject;
 
 @Service
 public class PersonService {
@@ -22,19 +26,20 @@ public class PersonService {
 	
 	private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName()); //faço a adição de um logger para a classe
 	
-	public Person create(Person person) {
+	public PersonDTO create(PersonDTO person) {
 		logger.info("Creating one person");
-		return repository.save(person);
+		var entity = parseObject(person, Person.class);
+		return parseObject(repository.save(entity), PersonDTO.class);
 	}
 	
-	public Person update(Person person) {
+	public PersonDTO update(PersonDTO person) {
 		logger.info("Updating one person");
 		Person entity = repository.findById(person.getId()).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
-		return repository.save(entity);
+		return parseObject(entity, PersonDTO.class);
 	}
 	
 	public void delete(Long id) {
@@ -43,14 +48,16 @@ public class PersonService {
 		repository.deleteById(id);
 	}
 	
-	public Person findById(Long id) {
+	public PersonDTO findById(Long id) {
 		logger.info("Finding one person");
-		return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
+		var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+		return parseObject(entity, PersonDTO.class);
+		
 	}
 	
-	public List<Person> findAll(){
+	public List<PersonDTO> findAll(){
 		logger.info("Finding all peoples");
-		return repository.findAll();
+		return parseListObjects(repository.findAll(), PersonDTO.class);
 	}
 
 	

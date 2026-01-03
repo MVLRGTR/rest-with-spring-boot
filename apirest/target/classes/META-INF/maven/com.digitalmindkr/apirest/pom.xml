@@ -26,9 +26,12 @@
 		<tag/>
 		<url/>
 	</scm>
+	
 	<properties>
 		<java.version>21</java.version>
+		<dozer.version>7.0.0</dozer.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,6 +65,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.github.dozermapper</groupId>
+    		<artifactId>dozer-core</artifactId>
+    		<version>${dozer.version}</version>
 		</dependency>
 	</dependencies>
 
