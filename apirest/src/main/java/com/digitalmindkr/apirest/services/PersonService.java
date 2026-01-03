@@ -39,7 +39,7 @@ public class PersonService {
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
-		return parseObject(entity, PersonDTO.class);
+		return parseObject(repository.save(entity), PersonDTO.class);
 	}
 	
 	public void delete(Long id) {
