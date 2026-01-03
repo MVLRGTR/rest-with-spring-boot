@@ -3,8 +3,8 @@ spring:
     name: apirest
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.136:3306/apijava?useTimezone=true&serverTimezone=UTC
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.1.136:3306/apijava?useTimezone=true&serverTimezone=UTC
     username: apijava_user
     password: SenhaForteAqui
 
@@ -15,4 +15,9 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+        # Ajustado para MySQL, já que seu driver é MySQL
+        #dialect: org.hibernate.dialect.MariaDBDialect   
+logging:
+  level:
+    root: WARN
+    com.digitalmindkr.apirest: DEBUG

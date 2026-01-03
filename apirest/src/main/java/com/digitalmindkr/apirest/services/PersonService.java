@@ -1,11 +1,13 @@
 package com.digitalmindkr.apirest.services;
 
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 import com.digitalmindkr.apirest.model.Person;
 import com.digitalmindkr.apirest.repository.PersonRepository;
@@ -18,7 +20,7 @@ public class PersonService {
 	@Autowired
 	PersonRepository repository;
 	
-	private Logger logger = Logger.getLogger(PersonService.class.getName()); //faço a adição de um logger para a classe
+	private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName()); //faço a adição de um logger para a classe
 	
 	public Person create(Person person) {
 		logger.info("Creating one person");
