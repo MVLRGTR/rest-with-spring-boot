@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.digitalmindkr.apirest.data.dto.PersonDTO;
+import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 import com.digitalmindkr.apirest.unitest.mapper.mocks.MockPerson;
 import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseObject;
 import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseListObjects;

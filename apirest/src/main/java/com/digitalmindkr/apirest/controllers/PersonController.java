@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitalmindkr.apirest.data.dto.PersonDTO;
+import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
+import com.digitalmindkr.apirest.data.dto.v2.PersonDTOv2;
 import com.digitalmindkr.apirest.services.PersonService;
 
 
@@ -28,6 +29,11 @@ public class PersonController {
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE ,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public PersonDTO create(@RequestBody PersonDTO person) {
 		return service.create(person);
+	}
+	
+	@PostMapping(value = "/v2" , produces = MediaType.APPLICATION_JSON_VALUE ,consumes = MediaType.APPLICATION_JSON_VALUE)
+	public PersonDTOv2 create(@RequestBody PersonDTOv2 person) {
+		return service.createV2(person);
 	}
 	
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE ,consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -1,9 +1,10 @@
-package com.digitalmindkr.apirest.data.dto;
+package com.digitalmindkr.apirest.data.dto.v2;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-public class PersonDTO implements Serializable{
+public class PersonDTOv2 implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private Long id;
@@ -12,8 +13,9 @@ public class PersonDTO implements Serializable{
 	private String lastName;
 	private String address;
 	private String gender;
+	private Date birthDay;
 	
-	public PersonDTO() {
+	public PersonDTOv2() {
 	}
 
 	public Long getId() {
@@ -55,6 +57,14 @@ public class PersonDTO implements Serializable{
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
+	public Date getBirthDay() {
+		return birthDay;
+	}
+
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
 
 	@Override
 	public int hashCode() {
@@ -69,12 +79,11 @@ public class PersonDTO implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PersonDTO other = (PersonDTO) obj;
+		PersonDTOv2 other = (PersonDTOv2) obj;
 		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
 				&& Objects.equals(gender, other.gender) && Objects.equals(id, other.id)
 				&& Objects.equals(lastName, other.lastName);
-	};
-	
-	
+	}
 
+	
 }

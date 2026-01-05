@@ -3,8 +3,8 @@ package com.digitalmindkr.apirest.unitest.mapper.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.digitalmindkr.apirest.data.dto.PersonDTO;
-import com.digitalmindkr.apirest.model.PersonDTO;
+import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
+//import com.digitalmindkr.apirest.model.PersonDTO;
 
 
 public class MockPerson {
