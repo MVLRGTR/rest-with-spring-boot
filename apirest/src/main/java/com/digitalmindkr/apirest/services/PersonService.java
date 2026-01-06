@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
-import com.digitalmindkr.apirest.data.dto.v2.PersonDTOv2;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
-import com.digitalmindkr.apirest.mapper.custom.PersonMapper;
 import com.digitalmindkr.apirest.model.Person;
 import com.digitalmindkr.apirest.repository.PersonRepository;
 
@@ -25,10 +23,7 @@ public class PersonService {
 	
 	@Autowired
 	PersonRepository repository;
-	@Autowired
-	PersonMapper converter;
 
-	
 	private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName()); //faço a adição de um logger para a classe
 	
 	public PersonDTO create(PersonDTO person) {
@@ -36,12 +31,7 @@ public class PersonService {
 		var entity = parseObject(person, Person.class);
 		return parseObject(repository.save(entity), PersonDTO.class);
 	}
-	
-	public PersonDTOv2 createV2(PersonDTOv2 person) {
-		logger.info("Creating one person V2");
-		var entity = parseObject(person, Person.class);
-		return converter.convertEntityToDTO(repository.save(entity));
-	}
+
 	
 	public PersonDTO update(PersonDTO person) {
 		logger.info("Updating one person");

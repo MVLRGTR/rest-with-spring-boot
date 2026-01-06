@@ -50,9 +50,13 @@
 		</dependency>
 		
 		<dependency>
-    		<groupId>org.mariadb.jdbc</groupId>
-    		<artifactId>mariadb-java-client</artifactId>
-    		<scope>runtime</scope>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.flywaydb</groupId>
+    		<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
 		<dependency>
@@ -61,6 +65,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -79,6 +84,29 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+    			<artifactId>flyway-maven-plugin</artifactId>
+    			<configuration>
+    				<ulr>jdbc:mysql://192.168.1.136:3306/apijava?useTimezone=true&amp;serverTimezone=UTC</ulr>
+    				<user>apijava_user</user>
+    				<password>SenhaForteAqui</password>
+    			</configuration>
+    			<dependencies>
+    				<dependency>
+						<groupId>com.mysql</groupId>
+						<artifactId>mysql-connector-j</artifactId>
+						<version>9.5.0</version>
+						<scope>runtime</scope>
+						<exclusions>
+							<exclusion>
+								<groupId>org.slf4j</groupId>
+								<artifactId>slf4j-api</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+    			</dependencies>
 			</plugin>
 		</plugins>
 	</build>

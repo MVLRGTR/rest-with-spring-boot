@@ -3,14 +3,14 @@ spring:
     name: apirest
 
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://192.168.1.136:3306/apijava?useTimezone=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.136:3306/apijava?useTimezone=true&serverTimezone=UTC
     username: apijava_user
     password: SenhaForteAqui
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
     open-in-view: false
     properties:
@@ -19,5 +19,5 @@ spring:
         #dialect: org.hibernate.dialect.MariaDBDialect   
 logging:
   level:
-    root: WARN
+    root: INFO
     com.digitalmindkr.apirest: DEBUG
