@@ -1,23 +1,31 @@
 package com.digitalmindkr.apirest.data.dto.v1;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import serializer.GenderSerializer;
 
 @JsonPropertyOrder({"id","address","first_name","last_name","gender"})
 public class PersonDTO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private Long id;
-	@JsonProperty("first_name")
+	//@JsonProperty("first_name")
 	private String firstName;
-	@JsonProperty("last_name")
+	//@JsonProperty("last_name")
 	private String lastName;
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private Date birthDay;
 	private String address;
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonSerialize(using = GenderSerializer.class)
 	private String gender;
 	
 	public PersonDTO() {
@@ -63,9 +71,17 @@ public class PersonDTO implements Serializable{
 		this.gender = gender;
 	}
 
+	public Date getBirthDay() {
+		return birthDay;
+	}
+
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, firstName, gender, id, lastName);
+		return Objects.hash(address, birthDay, firstName, gender, id, lastName);
 	}
 
 	@Override
@@ -77,8 +93,10 @@ public class PersonDTO implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		PersonDTO other = (PersonDTO) obj;
-		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(gender, other.gender) && Objects.equals(id, other.id)
-				&& Objects.equals(lastName, other.lastName);
-	};
+		return Objects.equals(address, other.address) && Objects.equals(birthDay, other.birthDay)
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(gender, other.gender)
+				&& Objects.equals(id, other.id) && Objects.equals(lastName, other.lastName);
+	}
+
+	
 }
