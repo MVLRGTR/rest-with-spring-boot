@@ -1,4 +1,4 @@
-package serializer;
+package com.digitalmindkr.apirest.serializer;
 
 import java.io.IOException;
 

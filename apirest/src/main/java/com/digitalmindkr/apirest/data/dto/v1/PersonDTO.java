@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import serializer.GenderSerializer;
+import com.digitalmindkr.apirest.serializer.GenderSerializer;
 
 //@JsonPropertyOrder({"id","address","first_name","last_name","gender"})
 public class PersonDTO implements Serializable{
