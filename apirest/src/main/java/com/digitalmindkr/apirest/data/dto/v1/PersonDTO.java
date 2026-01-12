@@ -4,18 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import serializer.GenderSerializer;
 
 //@JsonPropertyOrder({"id","address","first_name","last_name","gender"})
-@JsonFilter("PersonFilter")
 public class PersonDTO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -32,7 +27,7 @@ public class PersonDTO implements Serializable{
 	private Date birthDay;
 	private String address;
 	//@JsonIgnore
-	//@JsonSerialize(using = GenderSerializer.class)
+	@JsonSerialize(using = GenderSerializer.class)
 	private String gender;
 	
 	public PersonDTO() {
