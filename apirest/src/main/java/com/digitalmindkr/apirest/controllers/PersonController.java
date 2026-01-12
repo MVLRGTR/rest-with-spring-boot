@@ -26,12 +26,26 @@ public class PersonController {
 	@Autowired // faz a injeçao de dependencia de forma transparente ao programador 
 	private PersonService service;
 	
-	@PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE} ,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(produces = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE ,
+			MediaType.APPLICATION_YAML_VALUE} ,
+				consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE ,
+			MediaType.APPLICATION_YAML_VALUE})
 	public PersonDTO create(@RequestBody PersonDTO person) {
 		return service.create(person);
 	}
 	
-	@PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE} ,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(produces = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE ,
+			MediaType.APPLICATION_YAML_VALUE} ,
+				consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE ,
+			MediaType.APPLICATION_YAML_VALUE})
 	public PersonDTO update(@RequestBody PersonDTO person) {
 		return service.update(person);
 	}
@@ -42,12 +56,19 @@ public class PersonController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(produces = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE})
 	public List<PersonDTO> findAll() {
 		return service.findAll();
 	}
 	
-	@GetMapping(value = "/{id}" ,produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/{id}" ,
+	    produces = {
+	    	MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE})
 	public PersonDTO findById(@PathVariable("id") Long id) {
 		var person = service.findById(id);
 		person.setBirthDay(new Date());
