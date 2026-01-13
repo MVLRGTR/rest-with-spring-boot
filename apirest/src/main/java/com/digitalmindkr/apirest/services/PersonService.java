@@ -4,9 +4,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalmindkr.apirest.controllers.PersonController;
 import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
@@ -29,9 +33,10 @@ public class PersonService {
 	public PersonDTO create(PersonDTO person) {
 		logger.info("Creating one person");
 		var entity = parseObject(person, Person.class);
-		return parseObject(repository.save(entity), PersonDTO.class);
+		var dto = parseObject(repository.save(entity), PersonDTO.class);
+		addHateoasLinks(dto);
+		return dto;
 	}
-
 	
 	public PersonDTO update(PersonDTO person) {
 		logger.info("Updating one person");
@@ -40,7 +45,9 @@ public class PersonService {
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
-		return parseObject(repository.save(entity), PersonDTO.class);
+		var dto = parseObject(repository.save(entity), PersonDTO.class);
+		addHateoasLinks(dto);
+		return dto;
 	}
 	
 	public void delete(Long id) {
@@ -52,14 +59,25 @@ public class PersonService {
 	public PersonDTO findById(Long id) {
 		logger.info("Finding one person");
 		var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-		return parseObject(entity, PersonDTO.class);
+		var dto = parseObject(entity, PersonDTO.class);
+		addHateoasLinks(dto);
+		return dto;
 		
 	}
-	
-	public List<PersonDTO> findAll(){
-		logger.info("Finding all peoples");
-		return parseListObjects(repository.findAll(), PersonDTO.class);
-	}
 
+	public List<PersonDTO> findAll(){ 
+		logger.info("Finding all peoples");
+		var persons =  parseListObjects(repository.findAll(), PersonDTO.class);
+		persons.forEach(p -> addHateoasLinks(p));
+		return persons;
+	}
+	
+	private void addHateoasLinks(PersonDTO dto) {
+		dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+		dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+		dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+		dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
+		dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
+	}
 	
 }

@@ -1,6 +1,6 @@
 package com.digitalmindkr.apirest.controllers;
 
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,9 +71,9 @@ public class PersonController {
 			MediaType.APPLICATION_YAML_VALUE})
 	public PersonDTO findById(@PathVariable("id") Long id) {
 		var person = service.findById(id);
-		person.setBirthDay(new Date());
-		person.setPhoneNumber("+55 (34) 98765-8956");
-		person.setSensitiveData("Foo Bar");
+		//person.setBirthDay(new Date());
+		//person.setPhoneNumber("+55 (34) 98765-8956");
+		//person.setSensitiveData("Foo Bar");
 		return person;
 	}
 	

@@ -15,7 +15,7 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        # Ajustado para MySQL, já que seu driver é MySQL
+        # Ajustado para MySQL
         #dialect: org.hibernate.dialect.MariaDBDialect   
 logging:
   level:
