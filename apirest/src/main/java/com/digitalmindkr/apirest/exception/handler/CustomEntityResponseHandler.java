@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.digitalmindkr.apirest.exception.ExceptionResponse;
+import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 
 @RestControllerAdvice     //Caso alguma classe não forneça tratamento adequado para o erro ele irá cair no tratamento global
@@ -28,5 +29,11 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
 	public final ResponseEntity<ExceptionResponse> handleNotFoundException(Exception ex , WebRequest request){
 		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
 		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RequiredObjectIsNullException.class) // aqui fazemos o tratamento de parametros não suportados 
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExeptions(Exception ex , WebRequest request){
+		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 	}
 }

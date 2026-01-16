@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.digitalmindkr.apirest.controllers.PersonController;
 import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
+import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 import com.digitalmindkr.apirest.model.Person;
 import com.digitalmindkr.apirest.repository.PersonRepository;
@@ -31,6 +32,7 @@ public class PersonService {
 	private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName()); //faço a adição de um logger para a classe
 	
 	public PersonDTO create(PersonDTO person) {
+		if (person == null ) throw new RequiredObjectIsNullException();
 		logger.info("Creating one person");
 		var entity = parseObject(person, Person.class);
 		var dto = parseObject(repository.save(entity), PersonDTO.class);
@@ -39,6 +41,7 @@ public class PersonService {
 	}
 	
 	public PersonDTO update(PersonDTO person) {
+		if (person == null ) throw new RequiredObjectIsNullException();
 		logger.info("Updating one person");
 		Person entity = repository.findById(person.getId()).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
 		entity.setFirstName(person.getFirstName());
@@ -52,8 +55,8 @@ public class PersonService {
 	
 	public void delete(Long id) {
 		logger.info("Deleting one person");
-		repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
-		repository.deleteById(id);
+		Person entity = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
+		repository.delete(entity);
 	}
 	
 	public PersonDTO findById(Long id) {
