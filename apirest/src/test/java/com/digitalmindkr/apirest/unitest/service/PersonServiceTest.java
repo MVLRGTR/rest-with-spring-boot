@@ -39,7 +39,7 @@ class PersonServiceTest {
 	@InjectMocks
 	private PersonService service;
 	
-	@Mock
+	@Mock // aqui eu crio um objeto "falso" com uma casca vazia da classe PersonRepository , por padrão esse objeto não faz nada e retorna null se chamado pois queremos controle total sobre o que ele retorna
 	PersonRepository repository;
 
 	@BeforeEach
@@ -52,11 +52,11 @@ class PersonServiceTest {
 	void FindById() {
 		Person person = input.mockEntity(1);
 		person.setId(1L);
-		when(repository.findById(1L)).thenReturn(Optional.of(person));
+		when(repository.findById(1L)).thenReturn(Optional.of(person)); //Quando o repository for chamado passo o objeto que tem que ser retornado com controle
 		
 		var result = service.findById(1L);
 		
-		assertNotNull(result);
+		assertNotNull(result);                //informa aqui que não pode ser nulo o retorno
 		assertNotNull(result.getId());
 		assertNotNull(result.getLinks());
 		
