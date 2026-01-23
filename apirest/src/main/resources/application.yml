@@ -21,3 +21,8 @@ logging:
   level:
     root: INFO
     com.digitalmindkr.apirest: DEBUG
+
+spring-doc:
+  paths-to-match: /person/**
+  swagger-ui:
+    use-root-path: true	
