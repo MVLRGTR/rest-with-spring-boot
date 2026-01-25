@@ -25,18 +25,17 @@ public class Book implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "author" , nullable = true , length = 120)
+	@Column(nullable = true , length = 120)
 	private String author;
 	@Column(name = "launch_date" , nullable = false)
 	@Temporal(TemporalType.DATE) //Obrigatorio na implementação com Date para que o banco receba somente a data e ignore as horas
 	private Date date;
-	@Column(name = "price" , nullable = false , precision = 10, scale = 2)
+	@Column(nullable = false , precision = 10, scale = 2)
 	private BigDecimal price;
-	@Column(name = "title" , nullable = true , length = 250)
+	@Column(nullable = true , length = 250)
 	private String title;
 
 	public Book() {
-		
 	}
 
 	public Long getId() {

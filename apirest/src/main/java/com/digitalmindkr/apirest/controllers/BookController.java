@@ -11,14 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalmindkr.apirest.controllers.docs.BookControllerDocs;
 import com.digitalmindkr.apirest.data.dto.v1.BookDTO;
 import com.digitalmindkr.apirest.services.BookService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@RestController
 @RequestMapping(value = "/book")
+@Tag(name = "Book" , description = "Endpoints for managing Book")
 public class BookController implements BookControllerDocs{
 	
 	@Autowired
