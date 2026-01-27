@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.digitalmindkr.apirest.data.dto.v1.BookDTO;
 
@@ -31,7 +32,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-	BookDTO create(BookDTO book);
+	BookDTO create(@RequestBody BookDTO book);
 	
 	@Operation(summary = "Updates a book's information",
             description = "Update book´s information by passing in a JSON, XML or YML representation of the Book.",
@@ -47,7 +48,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-	BookDTO update(BookDTO book);
+	BookDTO update(@RequestBody BookDTO book);
 	
 	ResponseEntity<?> delete(@PathVariable("id") Long id);
 	@Operation(summary = "Find All Books",
@@ -86,7 +87,7 @@ public interface BookControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-	BookDTO findById(Long id);
+	BookDTO findById(@PathVariable("id") Long id);
 	
 
 }

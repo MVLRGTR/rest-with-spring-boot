@@ -23,6 +23,6 @@ logging:
     com.digitalmindkr.apirest: DEBUG
 
 spring-doc:
-  paths-to-match: /person/**
+  paths-to-match: /person/**,/book/**
   swagger-ui:
     use-root-path: true	

@@ -1,10 +1,11 @@
 package com.digitalmindkr.apirest.data.dto.v1;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import org.springframework.hateoas.RepresentationModel;
+import java.util.Objects;
 
 
 public class BookDTO extends RepresentationModel<BookDTO> implements Serializable{
@@ -19,7 +20,7 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
 	
 	public BookDTO() {
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -58,6 +59,27 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(author, date, id, price, title);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BookDTO other = (BookDTO) obj;
+		return Objects.equals(author, other.author) && Objects.equals(date, other.date) && Objects.equals(id, other.id)
+				&& Objects.equals(price, other.price) && Objects.equals(title, other.title);
 	}
 
 }

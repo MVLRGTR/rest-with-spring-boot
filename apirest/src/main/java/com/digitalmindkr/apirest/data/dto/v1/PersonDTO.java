@@ -8,9 +8,9 @@ import org.springframework.hateoas.RepresentationModel;
 
 //import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+//import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import com.digitalmindkr.apirest.serializer.GenderSerializer;
+//import com.digitalmindkr.apirest.serializer.GenderSerializer;
 
 //@JsonPropertyOrder({"id","address","first_name","last_name","gender"})
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable{
@@ -29,7 +29,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
 	//private Date birthDay;
 	private String address;
 	//@JsonIgnore
-	@JsonSerialize(using = GenderSerializer.class)
+	//@JsonSerialize(using = GenderSerializer.class)
 	private String gender;
 	
 	public PersonDTO() {
