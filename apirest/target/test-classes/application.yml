@@ -1,0 +1,28 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: apirest
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        # Ajustado para MySQL
+        #dialect: org.hibernate.dialect.MariaDBDialect   
+logging:
+  level:
+    root: INFO
+    com.digitalmindkr.apirest: DEBUG
+
+spring-doc:
+  paths-to-match: /person/**,/book/**
+  swagger-ui:
+    use-root-path: true 
