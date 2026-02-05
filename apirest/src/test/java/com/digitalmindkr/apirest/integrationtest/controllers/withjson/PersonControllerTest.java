@@ -48,7 +48,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
 	void Create() throws JsonProcessingException {
 		mockPerson();
 
-        specification = new RequestSpecBuilder()
+        specification = new RequestSpecBuilder() //montando a requisição para ser enviada 
             .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_DIGITALMINDKR)
             .setBasePath("/person")
             .setPort(TestConfigs.SERVER_PORT)
@@ -56,7 +56,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
             .build();
 
-        var content = given(specification)
+        var content = given(specification) //aqui de fato a requisição e feita no nosso teste de integração para depois compararmos as respostas
             .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(person)
             .when()
@@ -65,7 +65,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
                 .statusCode(200)
             .extract()
                 .body()
-                    .asString();
+                    .asString(); // o problema aqui que contente e uma string e por isso precisamos converter ela em um objeto para poder fazer a manipulação
 
         PersonDTO createdPerson = objectMapper.readValue(content, PersonDTO.class);
         person = createdPerson;
@@ -179,14 +179,14 @@ class PersonControllerTest extends AbstractIntegrationTest{
 	void Update() {
 		fail("Not yet implemented");
 	}
-
+	
 	@Test
-	void Delete() {
+	void FindAll() {
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	void FindAll() {
+	void Delete() {
 		fail("Not yet implemented");
 	}
 	*/

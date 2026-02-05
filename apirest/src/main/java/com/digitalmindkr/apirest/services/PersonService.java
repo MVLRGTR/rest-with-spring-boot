@@ -10,6 +10,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.digitalmindkr.apirest.controllers.PersonController;
 import com.digitalmindkr.apirest.controllers.TestLogController;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
@@ -17,6 +18,8 @@ import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 import com.digitalmindkr.apirest.model.Person;
 import com.digitalmindkr.apirest.repository.PersonRepository;
+
+import jakarta.transaction.Transactional;
 
 import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseListObjects;
 import static com.digitalmindkr.apirest.mapper.ObjectMapper.parseObject;
@@ -53,6 +56,17 @@ public class PersonService {
 		return dto;
 	}
 	
+	@Transactional //faço a adição dessa anotation para ela ter os requisitos ACID já que esse recurso não exite por padrão no JPA
+	public PersonDTO disablePerson(Long id) {
+		logger.info("Disabling one person");
+		repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
+		repository.disablePerson(id);
+		var entity = repository.findById(id).get();
+		var dto = parseObject(entity, PersonDTO.class);
+		addHateoasLinks(dto);
+		return dto;
+	}
+	
 	public void delete(Long id) {
 		logger.info("Deleting one person");
 		Person entity = repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No records found for this ID"));
@@ -80,6 +94,7 @@ public class PersonService {
 		dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
 		dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
 		dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("update").withType("PUT"));
+		dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
 		dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
 	}
 	
