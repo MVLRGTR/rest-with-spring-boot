@@ -11,6 +11,6 @@ import com.digitalmindkr.apirest.model.Person;
 public interface PersonRepository extends JpaRepository<Person, Long>{
 	
 	@Modifying(clearAutomatically = true)
-	@Query("UPDATE Person as p SET p.enable = false WHERE p.id = :id")
+	@Query("UPDATE Person as p SET p.enabled = false WHERE p.id = :id")
 	void disablePerson(@Param("id") Long id);
 }

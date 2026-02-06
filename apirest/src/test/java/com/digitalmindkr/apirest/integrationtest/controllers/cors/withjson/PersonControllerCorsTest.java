@@ -1,4 +1,4 @@
-package com.digitalmindkr.apirest.integrationtest.controllers.withjson;
+package com.digitalmindkr.apirest.integrationtest.controllers.cors.withjson;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
@@ -30,7 +30,7 @@ import io.restassured.specification.RequestSpecification;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)//isso serve para O Junit seguir uma ordenação nos testes , caso o proximo dependa do anterior
-class PersonControllerTest extends AbstractIntegrationTest{
+class PersonControllerCorsTest extends AbstractIntegrationTest{
 	
 	private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
@@ -82,6 +82,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
         assertEquals("Stallman", createdPerson.getLastName());
         assertEquals("New York City - New York - USA", createdPerson.getAddress());
         assertEquals("Male", createdPerson.getGender());
+        assertEquals(true, createdPerson.getEnabled());
 	}
 	
 	@Test
@@ -148,6 +149,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
         assertEquals("Stallman", createdPerson.getLastName());
         assertEquals("New York City - New York - USA", createdPerson.getAddress());
         assertEquals("Male", createdPerson.getGender());
+        assertEquals(true, createdPerson.getEnabled());
     }
 	
 	@Test
@@ -195,6 +197,7 @@ class PersonControllerTest extends AbstractIntegrationTest{
 		person.setLastName("Stallman");
 		person.setAddress("New York City - New York - USA");
 		person.setGender("Male");
+		person.setEnabled(true);
 		
 	}
 
