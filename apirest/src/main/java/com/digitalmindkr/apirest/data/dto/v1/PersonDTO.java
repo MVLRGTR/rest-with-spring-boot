@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+import org.springframework.lang.Nullable;
 
 //import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 //import com.digitalmindkr.apirest.serializer.GenderSerializer;
 
 //@JsonPropertyOrder({"id","address","first_name","last_name","gender"})
+@Relation(collectionRelation = "people")
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -93,7 +96,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))

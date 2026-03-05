@@ -7,8 +7,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,8 @@ public class PersonService {
 	
 	@Autowired
 	PersonRepository repository;
+	@Autowired
+	PagedResourcesAssembler<PersonDTO> assembler;
 
 	private Logger logger = LoggerFactory.getLogger(TestLogController.class.getName()); //faço a adição de um logger para a classe
 	
@@ -83,7 +89,8 @@ public class PersonService {
 		
 	}
 
-	public Page<PersonDTO> findAll(@NonNull Pageable pageable){ 
+	@SuppressWarnings("null")
+	public PagedModel<EntityModel<PersonDTO>> findAll(@NonNull Pageable pageable){ 
 		logger.info("Finding all peoples");
 		
 		var people = repository.findAll(pageable);
@@ -92,7 +99,15 @@ public class PersonService {
 			addHateoasLinks(dto);
 			return dto;
 		});
-		return peopleWithLinks;
+		
+		 Link findAllLink = WebMvcLinkBuilder.linkTo(
+		            WebMvcLinkBuilder.methodOn(PersonController.class)
+		                .findAll(
+		                    pageable.getPageNumber(),
+		                    pageable.getPageSize(),
+		                    String.valueOf(pageable.getSort())))
+		                .withSelfRel();
+		    return assembler.toModel(peopleWithLinks, findAllLink);
 	}
 	
 	@SuppressWarnings("null")

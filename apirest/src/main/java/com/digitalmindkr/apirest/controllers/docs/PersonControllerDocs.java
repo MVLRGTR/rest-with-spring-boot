@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 
@@ -92,7 +94,7 @@ public interface PersonControllerDocs {
             }
     )
 	//List<PersonDTO> findAll();
-	ResponseEntity<Page<PersonDTO>> findAll(
+	ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(
 			@RequestParam(value = "page" , defaultValue = "0") Integer page,
 			@RequestParam(value = "size" , defaultValue = "10") Integer size,
 			@RequestParam(value = "direction" , defaultValue = "asc") String direction
