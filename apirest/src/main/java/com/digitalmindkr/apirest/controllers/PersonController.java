@@ -1,11 +1,11 @@
 package com.digitalmindkr.apirest.controllers;
 
 //import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -81,7 +81,7 @@ public class PersonController implements PersonControllerDocs {
 			MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_YAML_VALUE})
-	public List<PersonDTO> findAll(pegeable) {
+	public List<PersonDTO> findAll() {
 		return service.findAll();
 	}
 	*/
@@ -93,9 +93,11 @@ public class PersonController implements PersonControllerDocs {
 			MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_YAML_VALUE})
 	public ResponseEntity<Page<PersonDTO>> findAll(
-		@RequestParam(value = "page" ,defaultValue = "0")Integer page, 
-		@RequestParam(value = "size" ,defaultValue = "12")Integer size) {
-		PageRequest pageable = PageRequest.of(page, size);
+		@RequestParam(value = "page" ,defaultValue = "1")Integer page, 
+		@RequestParam(value = "size" ,defaultValue = "12")Integer size,
+		@RequestParam(value = "direction" ,defaultValue = "asc")String direction) {
+		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+		PageRequest pageable = PageRequest.of(page-1, size,Sort.by(sortDirection,"firstName"));
 		return ResponseEntity.ok(service.findAll(pageable));
 	}
 	
