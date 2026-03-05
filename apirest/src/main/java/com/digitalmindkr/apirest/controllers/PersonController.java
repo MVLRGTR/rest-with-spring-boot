@@ -4,6 +4,8 @@ package com.digitalmindkr.apirest.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalmindkr.apirest.controllers.docs.PersonControllerDocs;
@@ -73,13 +76,27 @@ public class PersonController implements PersonControllerDocs {
 		return ResponseEntity.noContent().build();
 	}
 	
+	/*@Override
+	@GetMapping(produces = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE})
+	public List<PersonDTO> findAll(pegeable) {
+		return service.findAll();
+	}
+	*/
+	
+	
 	@Override
 	@GetMapping(produces = {
 			MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_YAML_VALUE})
-	public List<PersonDTO> findAll() {
-		return service.findAll();
+	public ResponseEntity<Page<PersonDTO>> findAll(
+		@RequestParam(value = "page" ,defaultValue = "0")Integer page, 
+		@RequestParam(value = "size" ,defaultValue = "12")Integer size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return ResponseEntity.ok(service.findAll(pageable));
 	}
 	
 	@Override

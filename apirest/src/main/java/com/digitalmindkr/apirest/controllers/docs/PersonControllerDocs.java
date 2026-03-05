@@ -1,9 +1,10 @@
 package com.digitalmindkr.apirest.controllers.docs;
 
-import java.util.List;
-
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 
@@ -12,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.MediaType;
+
 
 public interface PersonControllerDocs {
 	
@@ -90,7 +91,11 @@ public interface PersonControllerDocs {
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
             }
     )
-	List<PersonDTO> findAll();
+	//List<PersonDTO> findAll();
+	ResponseEntity<Page<PersonDTO>> findAll(
+			@RequestParam(value = "page" , defaultValue = "0") Integer page,
+			@RequestParam(value = "size" , defaultValue = "10") Integer size
+	);
 	
 	@Operation(summary = "Finds a Person",
             description = "Find a specific person by your ID",
