@@ -101,12 +101,13 @@ public class PersonService {
 		});
 		
 		 Link findAllLink = WebMvcLinkBuilder.linkTo(
-		            WebMvcLinkBuilder.methodOn(PersonController.class)
-		                .findAll(
-		                    pageable.getPageNumber(),
-		                    pageable.getPageSize(),
-		                    String.valueOf(pageable.getSort())))
-		                .withSelfRel();
+            WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    String.valueOf(pageable.getSort())))
+                .withSelfRel();
+		 
 		    return assembler.toModel(peopleWithLinks, findAllLink);
 	}
 	

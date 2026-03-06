@@ -2,7 +2,6 @@ package com.digitalmindkr.apirest.controllers;
 
 //import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -98,6 +97,7 @@ public class PersonController implements PersonControllerDocs {
 		@RequestParam(value = "page" ,defaultValue = "1")Integer page, 
 		@RequestParam(value = "size" ,defaultValue = "12")Integer size,
 		@RequestParam(value = "direction" ,defaultValue = "asc")String direction) {
+		
 		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
 		PageRequest pageable = PageRequest.of(page-1, size,Sort.by(sortDirection,"firstName"));
 		return ResponseEntity.ok(service.findAll(pageable));
