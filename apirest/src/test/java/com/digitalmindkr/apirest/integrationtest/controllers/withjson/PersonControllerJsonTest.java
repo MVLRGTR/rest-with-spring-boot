@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 
 import com.digitalmindkr.apirest.config.TestConfigs;
 import com.digitalmindkr.apirest.integrationtest.dto.PersonDTO;
+import com.digitalmindkr.apirest.integrationtest.dto.wrappers.json.WrapperPersonDTO;
 import com.digitalmindkr.apirest.integrationtest.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -176,33 +177,34 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Order(6)
 	void findAllTest() throws JsonProcessingException {
 
-		var content = given(specification).accept(MediaType.APPLICATION_JSON_VALUE).when().get().then().statusCode(200)
+		var content = given(specification).accept(MediaType.APPLICATION_JSON_VALUE).queryParam("page", 1,"size" , 12 ,"direction","asc").when().get().then().statusCode(200)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).extract().body().asString();
 
-		List<PersonDTO> people = objectMapper.readValue(content, new TypeReference<List<PersonDTO>>() {
-		});
+		
+		WrapperPersonDTO wrapper = objectMapper.readValue(content, WrapperPersonDTO.class);
+		List<PersonDTO> people = wrapper.getEmbedded().getPeoples();
 
 		PersonDTO personOne = people.get(0);
 
 		assertNotNull(personOne.getId());
 		assertTrue(personOne.getId() > 0);
 
-		assertEquals("Leandro", personOne.getFirstName());
-		assertEquals("Carnal Mafra Mafra", personOne.getLastName());
-		assertEquals("Uberlândia - Minas Gerais - Brasil", personOne.getAddress());
+		assertEquals("Abbie", personOne.getFirstName());
+		assertEquals("Avramovsky", personOne.getLastName());
+		assertEquals("PO Box 93214", personOne.getAddress());
 		assertEquals("Male", personOne.getGender());
-		assertTrue(personOne.getEnabled());
+		assertFalse(personOne.getEnabled());
 
 		PersonDTO personFour = people.get(3);
 
 		assertNotNull(personFour.getId());
 		assertTrue(personFour.getId() > 0);
 
-		assertEquals("Leandro", personFour.getFirstName());
-		assertEquals("Erudio", personFour.getLastName());
-		assertEquals("Porto Alegre", personFour.getAddress());
+		assertEquals("Abramo", personFour.getFirstName());
+		assertEquals("Tollit", personFour.getLastName());
+		assertEquals("PO Box 68162", personFour.getAddress());
 		assertEquals("Male", personFour.getGender());
-		assertTrue(personFour.getEnabled());
+		assertFalse(personFour.getEnabled());
 	}
 	
 	
