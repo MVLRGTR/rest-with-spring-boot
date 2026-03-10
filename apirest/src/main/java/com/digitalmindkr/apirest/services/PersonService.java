@@ -111,6 +111,28 @@ public class PersonService {
 		    return assembler.toModel(peopleWithLinks, findAllLink);
 	}
 	
+	public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable pageable){ 
+		logger.info("Finding people by name");
+		
+		var people = repository.findPeopleByName(firstName,pageable);
+		var peopleWithLinks = people.map((Person person) -> {
+			var dto = parseObject(person, PersonDTO.class);
+			addHateoasLinks(dto);
+			return dto;
+		});
+		
+		 Link findAllLink = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    String.valueOf(pageable.getSort())))
+                .withSelfRel();
+		 
+		    return assembler.toModel(peopleWithLinks, findAllLink);
+	}
+	
+	
 	@SuppressWarnings("null")
 	private void addHateoasLinks(PersonDTO dto) {
 		if (dto == null) return;
