@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit.jupiter.DisabledIf;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
@@ -31,6 +35,7 @@ import com.digitalmindkr.apirest.model.Person;
 import com.digitalmindkr.apirest.repository.PersonRepository;
 import com.digitalmindkr.apirest.services.PersonService;
 import com.digitalmindkr.apirest.unitest.mapper.mocks.MockPerson;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)  // aqui eu faço a definição do tempo de vida dos objetos aqui criados somente para essa classe
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +48,9 @@ class PersonServiceTest {
 	
 	@Mock // aqui eu crio um objeto "falso" com uma casca vazia da classe PersonRepository , por padrão esse objeto não faz nada e retorna null se chamado pois queremos controle total sobre o que ele retorna
 	PersonRepository repository;
+	
+	@Mock // Adicione isso para evitar NullPointerException!
+	PagedResourcesAssembler<PersonDTO> assembler;
 
 	@BeforeEach
 	void setUp() {
@@ -260,17 +268,33 @@ class PersonServiceTest {
 	}
 	
 	@Test 
-	@DisabledIf("REASON : Still Under Development")
 	void findAll() {
-		List<Person> list = input.mockEntityList();
-		when(repository.findAll()).thenReturn(list);
-		//List<PersonDTO> people = service.findAll();
-		List<PersonDTO> people = new ArrayList<>();
 		
+		List<Person> list = input.mockEntityList();
+        org.springframework.data.domain.Page<Person> page = new org.springframework.data.domain.PageImpl<>(list);
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        
+        // CORREÇÃO: Ensinando o mock do assembler a pegar a página gerada pelo serviço e empacotar em um PagedModel
+        when(assembler.toModel(any(org.springframework.data.domain.Page.class), any(org.springframework.hateoas.Link.class)))
+            .thenAnswer(invocation -> {
+                org.springframework.data.domain.Page<PersonDTO> pageArg = invocation.getArgument(0);
+                List<EntityModel<PersonDTO>> entityModels = pageArg.getContent().stream()
+                        .map(EntityModel::of)
+                        .toList();
+                return PagedModel.of(entityModels, new PagedModel.PageMetadata(pageArg.getSize(), pageArg.getNumber(), pageArg.getTotalElements()));
+            });
+        
+        PageRequest pageable = PageRequest.of(0, 12, Sort.by("asc","firstName"));
+        
+        PagedModel<EntityModel<PersonDTO>> pagedModel = service.findAll(pageable);
+        
+        List<EntityModel<PersonDTO>> people = pagedModel.getContent().stream().toList();
+        
+        assertNotNull(people);
 		assertNotNull(people);
 		assertEquals(14,people.size());
 		
-		var personOne = people.get(1);
+		var personOne = people.get(1).getContent();
 		
 		assertNotNull(personOne);
         assertNotNull(personOne.getId());
@@ -315,7 +339,7 @@ class PersonServiceTest {
         assertEquals("Last Name Test1", personOne.getLastName());
         assertEquals("Female", personOne.getGender());
 
-        var personFour = people.get(4);
+        var personFour = people.get(4).getContent();
 
         assertNotNull(personFour);
         assertNotNull(personFour.getId());
@@ -360,7 +384,7 @@ class PersonServiceTest {
         assertEquals("Last Name Test4", personFour.getLastName());
         assertEquals("Male", personFour.getGender());
 
-        var personSeven = people.get(7);
+        var personSeven = people.get(7).getContent();
 
         assertNotNull(personSeven);
         assertNotNull(personSeven.getId());

@@ -24,10 +24,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit.jupiter.DisabledIf;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+
 
 import com.digitalmindkr.apirest.data.dto.v1.BookDTO;
-import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.model.Book;
 import com.digitalmindkr.apirest.repository.BookRepository;
@@ -51,6 +56,9 @@ public class BookServiceTest {
 		input = new MockBook();
 		MockitoAnnotations.openMocks(this);
 	}
+	
+	@Mock 
+	PagedResourcesAssembler<BookDTO> assembler;
 	
 	@Test
 	void FindById() {
@@ -108,7 +116,8 @@ public class BookServiceTest {
 		
 		BookDTO dto = input.mockDTO(1);
 		
-		when(repository.save(book)).thenReturn(persisted);
+		//when(repository.save(book)).thenReturn(persisted);
+		when(repository.save(any(Book.class))).thenReturn(persisted);
 		
 		var result = service.create(dto);
 		
@@ -246,16 +255,31 @@ public class BookServiceTest {
     }
 	
 	@Test
-	@DisabledIf("REASON : Still Under Development")
     void findAll() {
-        List<Book> list = input.mockEntityList();
-        when(repository.findAll()).thenReturn(list);
-        List<BookDTO> books = new ArrayList<>();
+		List<Book> list = input.mockEntityList();
+        org.springframework.data.domain.Page<Book> page = new org.springframework.data.domain.PageImpl<>(list);
+        when(repository.findAll(any(Pageable.class))).thenReturn(page);
+        
+        // CORREÇÃO: Ensinando o mock do assembler a pegar a página gerada pelo serviço e empacotar em um PagedModel
+        when(assembler.toModel(any(org.springframework.data.domain.Page.class), any(org.springframework.hateoas.Link.class)))
+            .thenAnswer(invocation -> {
+                org.springframework.data.domain.Page<BookDTO> pageArg = invocation.getArgument(0);
+                List<EntityModel<BookDTO>> entityModels = pageArg.getContent().stream()
+                        .map(EntityModel::of)
+                        .toList();
+                return PagedModel.of(entityModels, new PagedModel.PageMetadata(pageArg.getSize(), pageArg.getNumber(), pageArg.getTotalElements()));
+            });
+        
+        PageRequest pageable = PageRequest.of(0, 12, Sort.by("asc","firstName"));
+        
+        PagedModel<EntityModel<BookDTO>> pagedModel = service.findAll(pageable);
+        
+        List<EntityModel<BookDTO>> books = pagedModel.getContent().stream().toList();
 
         assertNotNull(books);
         assertEquals(14, books.size());
 
-        var bookOne = books.get(1);
+        var bookOne = books.get(1).getContent();
 
         assertNotNull(bookOne);
         assertNotNull(bookOne.getId());
@@ -300,7 +324,7 @@ public class BookServiceTest {
 		assertEquals("title1",  bookOne.getTitle());
 		assertNotNull( bookOne.getDate());
 
-        var bookFour = books.get(4);
+        var bookFour = books.get(4).getContent();
 
         assertNotNull(bookFour);
         assertNotNull(bookFour.getId());
@@ -345,7 +369,7 @@ public class BookServiceTest {
 		assertEquals("title4",  bookFour.getTitle());
 		assertNotNull( bookFour.getDate());
 
-        var bookSeven = books.get(7);
+        var bookSeven = books.get(7).getContent();
 
         assertNotNull(bookSeven);
         assertNotNull(bookSeven.getId());
