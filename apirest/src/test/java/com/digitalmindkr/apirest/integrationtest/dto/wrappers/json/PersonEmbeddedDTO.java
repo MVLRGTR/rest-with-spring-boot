@@ -23,7 +23,5 @@ public class PersonEmbeddedDTO implements Serializable{
 	public void setPeoples(List<PersonDTO> peoples) {
 		this.peoples = peoples;
 	}
-	
-	
 
 }
