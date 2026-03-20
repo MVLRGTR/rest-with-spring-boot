@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BookEmbeddedDTO {
 private static final long serialVersionUID = 1L;
 	
-	@JsonProperty("book")
+	@JsonProperty("books")
 	private List<BookDTO> books;
 
 	public BookEmbeddedDTO() {
