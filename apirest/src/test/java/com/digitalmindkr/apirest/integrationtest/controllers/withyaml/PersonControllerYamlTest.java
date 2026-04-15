@@ -238,6 +238,49 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest{
 		assertFalse(personFour.getEnabled());
 	}
 	
+	@Test
+	@Order(7)
+	void findByNameTest() throws JsonProcessingException {
+
+		var content = given(specification)
+				.accept(MediaType.APPLICATION_YAML_VALUE)
+				.pathParam("firstName", "and")
+				.queryParams("page", 1,"size" , 12 ,"direction","asc")
+				.when()
+				.get("findByName/{firstName}")
+				.then()
+				.statusCode(200)
+				.contentType(MediaType.APPLICATION_YAML_VALUE)
+				.extract()
+				.body()
+				.as(PagedModelPerson.class,objectMapper);
+
+		
+        List<PersonDTO> people = content.getContent();
+
+		PersonDTO personOne = people.get(0);
+
+		assertNotNull(personOne.getId());
+		assertTrue(personOne.getId() > 0);
+
+		assertEquals("Alejandra", personOne.getFirstName());
+		assertEquals("Reiach", personOne.getLastName());
+		assertEquals("PO Box 76626", personOne.getAddress());
+		assertEquals("Female", personOne.getGender());
+		assertFalse(personOne.getEnabled());
+
+		PersonDTO personFour = people.get(3);
+
+		assertNotNull(personFour.getId());
+		assertTrue(personFour.getId() > 0);
+
+		assertEquals("Alisander", personFour.getFirstName());
+		assertEquals("Yerrill", personFour.getLastName());
+		assertEquals("Suite 94", personFour.getAddress());
+		assertEquals("Male", personFour.getGender());
+		assertFalse(personFour.getEnabled());
+	}
+	
 	
 	private void mockPerson() {
 		person.setFirstName("Linus");
