@@ -22,7 +22,6 @@ import com.digitalmindkr.apirest.integrationtest.dto.PersonDTO;
 import com.digitalmindkr.apirest.integrationtest.dto.wrappers.json.WrapperPersonDTO;
 import com.digitalmindkr.apirest.integrationtest.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
