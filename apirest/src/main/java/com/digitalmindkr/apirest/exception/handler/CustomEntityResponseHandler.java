@@ -11,6 +11,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.digitalmindkr.apirest.exception.ExceptionResponse;
+import com.digitalmindkr.apirest.exception.FileNotFoundException;
+import com.digitalmindkr.apirest.exception.FileStorageException;
 import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
 
@@ -35,5 +37,17 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
 	public final ResponseEntity<ExceptionResponse> handleBadRequestExeptions(Exception ex , WebRequest request){
 		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
 		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class) // aqui fazemos o tratamento de arquivos não encontrados
+	public final ResponseEntity<ExceptionResponse> handleFileNotFoundException(Exception ex , WebRequest request){
+		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+		return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(FileStorageException.class) // aqui fazemos o tratamento de exceções gerais de arquivos como tamanho e etc
+	public final ResponseEntity<ExceptionResponse> handleFileStorageException(Exception ex , WebRequest request){
+		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+		return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

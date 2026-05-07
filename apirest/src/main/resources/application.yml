@@ -1,5 +1,7 @@
 cors:
   originPatterns: http://localhost:8080,https://www.digitalmindkr.com,http://localhost:3000
+file:
+  upload-dir: /Users/Marcos/Documents/codeFiles
 spring:
   application:
     name: apirest
@@ -18,7 +20,14 @@ spring:
     properties:
       hibernate:
         # Ajustado para MySQL
-        #dialect: org.hibernate.dialect.MariaDBDialect   
+        #dialect: org.hibernate.dialect.MariaDBDialect
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB  
+      max-request-size: 215MB 
+
 logging:
   level:
     root: INFO

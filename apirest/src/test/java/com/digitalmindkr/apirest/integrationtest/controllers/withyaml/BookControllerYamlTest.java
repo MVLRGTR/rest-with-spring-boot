@@ -160,7 +160,7 @@ public class BookControllerYamlTest extends AbstractIntegrationTest{
 
 		assertEquals("Angelo Reboucas", createdBook.getAuthor());
 		assertEquals(createdBook.getDate(), expectedDate);
-		assertEquals(createdBook.getPrice(), new BigDecimal("104.4"));
+		assertEquals(createdBook.getPrice(), new BigDecimal("104.40"));
 		assertEquals(createdBook.getTitle(), "Como conquistar uma mulher perigosa 2");
 	}
 
