@@ -42,9 +42,9 @@ public class FileController implements FileControllerDocs{
     public FileUploadResponseDTO uploadFile(@RequestParam("file") MultipartFile file) {
         var fileName = service.storeFile(file);
 
-        // http://localhost:8080/api/file/v1/downloadFile/filename.docx
+        // http://localhost:8080/file/downloadFile/filename.docx
         var fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/file/v1/downloadFile/")
+                .path("/file/downloadFile/")
                 .path(fileName)
                 .toUriString();
 

@@ -12,19 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 import org.springframework.core.io.Resource;
 
 import com.digitalmindkr.apirest.config.FileStorageConfig;
 import com.digitalmindkr.apirest.exception.FileNotFoundException;
 import com.digitalmindkr.apirest.exception.FileStorageException;
 
+@Service	
 public class FileStorageService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 	
 	private final Path fileStorageLocation;
 	
-    @Autowired
+	@Autowired
     public FileStorageService(FileStorageConfig fileStorageConfig) {
         Path path = Paths.get(fileStorageConfig.getUploadDir()).toAbsolutePath()
                 .toAbsolutePath().normalize();
