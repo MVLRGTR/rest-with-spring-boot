@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "file")
-public class FileSotorageConfig {
+public class FileStorageConfig {
 	
 	private String uploadDir;
 
-	public FileSotorageConfig() {
+	public FileStorageConfig() {
 	}
 
 	public String getUploadDir() {
