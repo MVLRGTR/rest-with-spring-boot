@@ -73,8 +73,6 @@ class BookControllerXMLTest extends AbstractIntegrationTest {
 				.extract().body().asString(); 
 		
 		
-		System.out.println(content);	
-		System.out.println("=============================================================");
 
 		BookDTO createdbook = objectMapper.readValue(content, BookDTO.class);
 		book = createdbook;
