@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.digitalmindkr.apirest.exception.BadRequestException;
 import com.digitalmindkr.apirest.exception.ExceptionResponse;
 import com.digitalmindkr.apirest.exception.FileNotFoundException;
 import com.digitalmindkr.apirest.exception.FileStorageException;
@@ -34,7 +35,7 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
 	}
 	
 	@ExceptionHandler(RequiredObjectIsNullException.class) // aqui fazemos o tratamento de parametros não suportados 
-	public final ResponseEntity<ExceptionResponse> handleBadRequestExeptions(Exception ex , WebRequest request){
+	public final ResponseEntity<ExceptionResponse> handleRequiredObjectExeptions(Exception ex , WebRequest request){
 		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
 		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
 	}
@@ -50,4 +51,12 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
 		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
 		return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(BadRequestException.class) // aqui fazemos o tratamento de parametros não suportados na importação de arquivos
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExeptions(Exception ex , WebRequest request){
+		ExceptionResponse response = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+	}
+	
+	
 }

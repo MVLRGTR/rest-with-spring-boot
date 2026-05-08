@@ -8,7 +8,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.136:3306/apijava?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/apijava?useTimezone=true&serverTimezone=UTC
     username: apijava_user
     password: SenhaForteAqui
 
@@ -34,6 +34,6 @@ logging:
     com.digitalmindkr.apirest: DEBUG
 
 spring-doc:
-  paths-to-match: /person/**,/book/**
+  paths-to-match: /person/**,/book/**,file/**
   swagger-ui:
     use-root-path: true	

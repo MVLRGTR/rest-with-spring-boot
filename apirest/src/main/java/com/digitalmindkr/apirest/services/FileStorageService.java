@@ -54,7 +54,7 @@ public class FileStorageService {
             logger.info("Saving file in Disk");
 
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING); //COPIA PARA O PATH
             return fileName;
         } catch (Exception e) {
             logger.error("Could not store file " + fileName + ". Please try Again!");
