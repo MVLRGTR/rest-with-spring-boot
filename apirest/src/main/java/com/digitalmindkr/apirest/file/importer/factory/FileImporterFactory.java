@@ -1,4 +1,4 @@
-package file.importer.factory;
+package com.digitalmindkr.apirest.file.importer.factory;
 
 
 import org.slf4j.Logger;
@@ -8,10 +8,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.digitalmindkr.apirest.exception.BadRequestException;
-
-import file.importer.contract.FileImporter;
-import file.importer.impl.CsvImporter;
-import file.importer.impl.XlsxImporter;
+import com.digitalmindkr.apirest.file.importer.contract.FileImporter;
+import com.digitalmindkr.apirest.file.importer.impl.CsvImporter;
+import com.digitalmindkr.apirest.file.importer.impl.XlsxImporter;
 
 @Component
 public class FileImporterFactory {

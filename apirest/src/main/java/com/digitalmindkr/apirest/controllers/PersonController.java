@@ -1,11 +1,15 @@
 package com.digitalmindkr.apirest.controllers;
 
+import java.util.List;
+
 //import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,118 +23,136 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Pageable;
 
 import com.digitalmindkr.apirest.controllers.docs.PersonControllerDocs;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
 import com.digitalmindkr.apirest.services.PersonService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 
 //@CrossOrigin(origins = "http://localhost:8080") caso queira implementar CORS em cada controller 
 @RestController
 @RequestMapping(value = "/person")
-@Tag(name = "People" , description = "Endpoints for managing People") //swagger
+@Tag(name = "People", description = "Endpoints for managing People") // swagger
 public class PersonController implements PersonControllerDocs {
 
-	@Autowired // faz a injeçao de dependencia de forma transparente ao programador 
+	@Autowired // faz a injeçao de dependencia de forma transparente ao programador
 	private PersonService service;
-	
+
 	@Override
-	@PostMapping(produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE ,
-			MediaType.APPLICATION_YAML_VALUE} ,
-				consumes = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE ,
-			MediaType.APPLICATION_YAML_VALUE})
+	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
 	public PersonDTO create(@RequestBody PersonDTO person) {
 		return service.create(person);
 	}
-	
+
 	@Override
-	@PutMapping(produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE ,
-			MediaType.APPLICATION_YAML_VALUE} ,
-				consumes = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE ,
-			MediaType.APPLICATION_YAML_VALUE})
+	@PutMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
 	public PersonDTO update(@RequestBody PersonDTO person) {
 		return service.update(person);
 	}
-	
+
 	@Override
-	@PatchMapping(value = "/{id}",produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE ,
-			MediaType.APPLICATION_YAML_VALUE})
+	@PatchMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE })
 	public PersonDTO disablePerson(@PathVariable("id") Long id) {
 		return service.disablePerson(id);
 	}
-	
+
 	@Override
-	@DeleteMapping(value = "/{id}" )
+	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	/*@Override
-	@GetMapping(produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_YAML_VALUE})
-	public List<PersonDTO> findAll() {
-		return service.findAll();
-	}
-	*/
-	
-	
+
+	/*
+	 * @Override
+	 * 
+	 * @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE,
+	 * MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}) public
+	 * List<PersonDTO> findAll() { return service.findAll(); }
+	 */
+
 	@Override
-	@GetMapping(produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_YAML_VALUE})
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE })
 	public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(
-		@RequestParam(value = "page" ,defaultValue = "1")Integer page, 
-		@RequestParam(value = "size" ,defaultValue = "12")Integer size,
-		@RequestParam(value = "direction" ,defaultValue = "asc")String direction) {
-		
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "size", defaultValue = "12") Integer size,
+			@RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
 		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-		PageRequest pageable = PageRequest.of(page-1, size,Sort.by(sortDirection,"firstName"));
+		PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, "firstName"));
 		return ResponseEntity.ok(service.findAll(pageable));
 	}
-	
+
 	@Override
-	@GetMapping(value = "/findByName/{firstName}",produces = {
-			MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_YAML_VALUE})
-	public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(
-			@PathVariable("firstName") String firstName,
-			@RequestParam(value = "page" , defaultValue = "1") Integer page,
-			@RequestParam(value = "size" , defaultValue = "10") Integer size,
-			@RequestParam(value = "direction" , defaultValue = "asc") String direction) {
-		
+	@GetMapping(value = "/findByName/{firstName}", produces = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
+	public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(@PathVariable("firstName") String firstName,
+			@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "size", defaultValue = "10") Integer size,
+			@RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
 		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-		PageRequest pageable = PageRequest.of(page-1, size,Sort.by(sortDirection,"firstName"));
-		return ResponseEntity.ok(service.findByName(firstName,pageable));
+		PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, "firstName"));
+		return ResponseEntity.ok(service.findByName(firstName, pageable));
 	}
-	
+
 	@Override
-	@GetMapping(value = "/{id}" ,
-	    produces = {
-	    	MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_YAML_VALUE})
+	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_YAML_VALUE })
 	public PersonDTO findById(@PathVariable("id") Long id) {
 		var person = service.findById(id);
-		//person.setBirthDay(new Date());
-		//person.setPhoneNumber("+55 (34) 98765-8956");
-		//person.setSensitiveData("Foo Bar");
+		// person.setBirthDay(new Date());
+		// person.setPhoneNumber("+55 (34) 98765-8956");
+		// person.setSensitiveData("Foo Bar");
 		return person;
 	}
+
+	@PostMapping(value = "/massCreation", produces = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
+	@Override
+	public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file) {
+		return service.massCreation(file);
+	}
 	
+	
+	/*@GetMapping(value = "/exportPage", produces = {
+            MediaTypes.APPLICATION_XLSX_VALUE,
+            MediaTypes.APPLICATION_CSV_VALUE})
+    @Override
+    public ResponseEntity<Resource> exportPage(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            HttpServletRequest request
+    ) {
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+
+        String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+        Resource file = service.exportPage(pageable, acceptHeader);
+
+
+        var contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
+        var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equalsIgnoreCase(acceptHeader) ? ".xlsx" : ".csv";
+        var filename = "people_exported" + fileExtension;
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(contentType))
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"")
+            .body(file);
+    }
+*/
 }

@@ -1,4 +1,4 @@
-package file.importer.contract;
+package com.digitalmindkr.apirest.file.importer.contract;
 
 import java.io.InputStream;
 import java.util.List;

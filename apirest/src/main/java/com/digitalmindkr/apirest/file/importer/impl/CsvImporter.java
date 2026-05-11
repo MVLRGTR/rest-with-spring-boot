@@ -1,4 +1,4 @@
-package file.importer.impl;
+package com.digitalmindkr.apirest.file.importer.impl;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,8 +10,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Component;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
-
-import file.importer.contract.FileImporter;
+import com.digitalmindkr.apirest.file.importer.contract.FileImporter;
 
 @Component
 public class CsvImporter implements FileImporter{

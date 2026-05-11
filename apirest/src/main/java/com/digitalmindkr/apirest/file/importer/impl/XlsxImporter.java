@@ -1,4 +1,4 @@
-package file.importer.impl;
+package com.digitalmindkr.apirest.file.importer.impl;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -7,8 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
-
-import file.importer.contract.FileImporter;
+import com.digitalmindkr.apirest.file.importer.contract.FileImporter;
 
 import java.io.InputStream;
 import java.util.ArrayList;
