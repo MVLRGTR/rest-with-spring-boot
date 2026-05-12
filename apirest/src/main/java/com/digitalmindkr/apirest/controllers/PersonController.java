@@ -128,7 +128,7 @@ public class PersonController implements PersonControllerDocs {
             HttpServletRequest request
     ) {
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(sortDirection, "firstName"));
 
         String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
 
