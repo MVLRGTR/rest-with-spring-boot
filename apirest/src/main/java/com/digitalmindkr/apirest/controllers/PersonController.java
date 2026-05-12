@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.digitalmindkr.apirest.controllers.docs.PersonControllerDocs;
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
+import com.digitalmindkr.apirest.file.export.MediaTypes;
 import com.digitalmindkr.apirest.services.PersonService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,14 +73,6 @@ public class PersonController implements PersonControllerDocs {
 		return ResponseEntity.noContent().build();
 	}
 
-	/*
-	 * @Override
-	 * 
-	 * @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE,
-	 * MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE}) public
-	 * List<PersonDTO> findAll() { return service.findAll(); }
-	 */
-
 	@Override
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_YAML_VALUE })
@@ -117,15 +110,14 @@ public class PersonController implements PersonControllerDocs {
 		return person;
 	}
 
-	@PostMapping(value = "/massCreation", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
+	@PostMapping(value = "/massCreation", produces = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE })
 	@Override
 	public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file) {
 		return service.massCreation(file);
 	}
 	
 	
-	/*@GetMapping(value = "/exportPage", produces = {
+	@GetMapping(value = "/exportPage", produces = {
             MediaTypes.APPLICATION_XLSX_VALUE,
             MediaTypes.APPLICATION_CSV_VALUE})
     @Override
@@ -142,7 +134,6 @@ public class PersonController implements PersonControllerDocs {
 
         Resource file = service.exportPage(pageable, acceptHeader);
 
-
         var contentType = acceptHeader != null ? acceptHeader : "application/octet-stream";
         var fileExtension = MediaTypes.APPLICATION_XLSX_VALUE.equalsIgnoreCase(acceptHeader) ? ".xlsx" : ".csv";
         var filename = "people_exported" + fileExtension;
@@ -154,5 +145,5 @@ public class PersonController implements PersonControllerDocs {
                 "attachment; filename=\"" + filename + "\"")
             .body(file);
     }
-*/
+
 }

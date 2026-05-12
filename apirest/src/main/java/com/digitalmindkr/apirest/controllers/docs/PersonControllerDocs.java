@@ -9,12 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
 
 import com.digitalmindkr.apirest.data.dto.v1.PersonDTO;
+import com.digitalmindkr.apirest.file.export.MediaTypes;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -171,7 +170,7 @@ public interface PersonControllerDocs {
     )
     List<PersonDTO> massCreation(MultipartFile file);
     
-    /*
+    
     @Operation(summary = "Export People",
             description = "Export a Page of People in XLSX and CSV format",
             tags = {"People"},
@@ -196,5 +195,5 @@ public interface PersonControllerDocs {
             @RequestParam(value = "direction", defaultValue = "asc") String direction,
             HttpServletRequest request
     );
-    */
+    
 }

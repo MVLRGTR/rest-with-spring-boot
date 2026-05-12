@@ -29,6 +29,8 @@ import com.digitalmindkr.apirest.exception.BadRequestException;
 import com.digitalmindkr.apirest.exception.FileStorageException;
 import com.digitalmindkr.apirest.exception.RequiredObjectIsNullException;
 import com.digitalmindkr.apirest.exception.ResourceNotFoundException;
+import com.digitalmindkr.apirest.file.export.contract.FileExporter;
+import com.digitalmindkr.apirest.file.export.factory.FileExporterFactory;
 import com.digitalmindkr.apirest.file.importer.contract.FileImporter;
 import com.digitalmindkr.apirest.file.importer.factory.FileImporterFactory;
 import com.digitalmindkr.apirest.model.Person;
@@ -47,6 +49,8 @@ public class PersonService {
 	PersonRepository repository;
 	@Autowired
     FileImporterFactory importer;
+	@Autowired
+    FileExporterFactory exporter;
 	@Autowired
 	PagedResourcesAssembler<PersonDTO> assembler;
 
@@ -162,6 +166,22 @@ public class PersonService {
         }
     }
 	
+	public Resource exportPage(Pageable pageable, String acceptHeader) {
+
+        logger.info("Exporting a People page!");
+
+        var people = repository.findAll(pageable)
+            .map(person -> parseObject(person, PersonDTO.class))
+            .getContent();
+
+        try {
+            FileExporter exporter = this.exporter.getExporter(acceptHeader);
+            return exporter.exportFile(people);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during file export!", e);
+        }
+    }
+	
 	@SuppressWarnings("null")
 	private void addHateoasLinks(PersonDTO dto) {
 		if (dto == null) return;
@@ -173,13 +193,13 @@ public class PersonService {
 		dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("disable").withType("PATCH"));
 		dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
 		
-		/*dto.add(linkTo(methodOn(PersonController.class)
+		dto.add(linkTo(methodOn(PersonController.class)
 	            .exportPage(
 	                1, 12, "asc", null))
 	            .withRel("exportPage")
 	            .withType("GET")
 	                .withTitle("Export People")
-	        );*/
+	        );
 	}
 	
 }
